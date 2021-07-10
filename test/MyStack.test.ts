@@ -3,9 +3,12 @@ import * as sst from "@serverless-stack/resources";
 import MyStack from "../lib/MyStack";
 
 test("Test Stack", () => {
-  const app = new sst.App();
-  // WHEN
-  const stack = new MyStack(app, "test-stack");
-  // THEN
-  expect(stack).to(haveResource("AWS::Cognito::IdentityPool"));
+    const app = new sst.App();
+    // WHEN
+    const stack = new MyStack(app, "test-stack");
+    // THEN
+    expect(stack).to(haveResource("AWS::Cognito::IdentityPool"));
+    expect(stack).to(haveResource("AWS::Cognito::IdentityPoolRoleAttachment"));
+
+    expect(stack).notTo(haveResource("AWS::Cognito::UserPool"));
 });

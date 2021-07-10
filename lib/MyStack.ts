@@ -6,14 +6,14 @@ export default class MyStack extends sst.Stack {
 
         // Create the Identity Pool
         const auth = new sst.Auth(this, `Auth`, {
-          cognito: false,
-          apple: {
-            servicesId: "TODO: Insert service id"
-          },
-          identityPool: {
-            allowUnauthenticatedIdentities: false,
-            allowClassicFlow: true
-          }
-        })
+            cognito: false,
+            apple: {
+                servicesId: process.env.APPLE_SERVICES_ID!,
+            },
+            identityPool: {
+                allowUnauthenticatedIdentities: false,
+                allowClassicFlow: true,
+            },
+        });
     }
 }
