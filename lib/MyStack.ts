@@ -15,5 +15,7 @@ export default class MyStack extends sst.Stack {
                 allowClassicFlow: true,
             },
         });
+
+        const bucket = new sst.Bucket(this, `PhotoBucket`, {});
     }
 }
