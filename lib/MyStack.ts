@@ -41,5 +41,10 @@ export default class MyStack extends sst.Stack {
                 },
             }),
         ]);
+
+        this.addOutputs({
+            identityPoolId: auth.cognitoCfnIdentityPool.ref,
+            storageBucket: bucket.bucketName,
+        });
     }
 }
