@@ -1,5 +1,6 @@
 import * as sst from "@serverless-stack/resources";
 import * as iam from "@aws-cdk/aws-iam";
+import * as s3 from "@aws-cdk/aws-s3";
 
 export default class MyStack extends sst.Stack {
     constructor(scope: sst.App, id: string, props?: sst.StackProps) {
@@ -42,9 +43,22 @@ export default class MyStack extends sst.Stack {
             }),
         ]);
 
+        const website = new sst.StaticSite(this, "ReactSite", {
+            path: "website",
+            buildOutput: "build",
+            buildCommand: "yarn build",
+            errorPage: sst.StaticSiteErrorOptions.REDIRECT_TO_INDEX_PAGE,
+        });
+
+        website.s3Bucket.addCorsRule({
+            allowedOrigins: ["*"],
+            allowedMethods: [s3.HttpMethods.GET],
+        });
+
         this.addOutputs({
             identityPoolId: auth.cognitoCfnIdentityPool.ref,
             storageBucket: bucket.bucketName,
+            website: website.url,
         });
     }
 }

@@ -4,16 +4,17 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Amplify from "aws-amplify";
+import { UserProvider } from './components/UserContext';
 
 Amplify.configure({
   Auth: {
-    identityPoolId: process.env.AWS_IDENTITY_POOL_ID,
+    identityPoolId: process.env.REACT_APP_AWS_IDENTITY_POOL_ID,
     region: "us-east-1",
     mandatorySignIn: true,
   },
   Storage: {
     AWSS3: {
-      bucket: process.env.STORAGE_BUCKET,
+      bucket: process.env.REACT_APP_STORAGE_BUCKET,
       region: "us-east-1",
     },
   },
@@ -22,7 +23,9 @@ Amplify.configure({
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <UserProvider>
+      <App />
+    </UserProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

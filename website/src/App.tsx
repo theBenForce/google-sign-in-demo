@@ -1,24 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useCurrentUser } from './components/UserContext';
 
 function App() {
+  const user = useCurrentUser();
+  const [userName, setUserName] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (!user?.signIn) return;
+
+    if (user.user) {
+      setUserName(user.user.name);
+      return;
+    }
+
+    user.signIn();
+  }, [user]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {user?.user ? <div>Signed In as {userName}</div> : <div>Not Signed In!</div>}
     </div>
   );
 }
