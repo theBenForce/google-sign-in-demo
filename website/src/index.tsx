@@ -3,6 +3,22 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Amplify from "aws-amplify";
+
+Amplify.configure({
+  Auth: {
+    identityPoolId: process.env.AWS_IDENTITY_POOL_ID,
+    region: "us-east-1",
+    mandatorySignIn: true,
+  },
+  Storage: {
+    AWSS3: {
+      bucket: process.env.STORAGE_BUCKET,
+      region: "us-east-1",
+    },
+  },
+  federationTarget: "COGNITO_USER_POOLS",
+});
 
 ReactDOM.render(
   <React.StrictMode>
