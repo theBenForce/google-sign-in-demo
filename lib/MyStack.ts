@@ -43,6 +43,8 @@ export default class MyStack extends sst.Stack {
             }),
         ]);
 
+        bucket.s3Bucket.grantReadWrite(auth.iamAuthRole);
+
         const website = new sst.StaticSite(this, "ReactSite", {
             path: "website",
             buildOutput: "build",
@@ -50,9 +52,23 @@ export default class MyStack extends sst.Stack {
             errorPage: sst.StaticSiteErrorOptions.REDIRECT_TO_INDEX_PAGE,
         });
 
-        website.s3Bucket.addCorsRule({
-            allowedOrigins: ["*"],
-            allowedMethods: [s3.HttpMethods.GET],
+        bucket.s3Bucket.addCorsRule({
+            allowedOrigins: [website.url],
+            allowedMethods: [
+                s3.HttpMethods.GET,
+                s3.HttpMethods.POST,
+                s3.HttpMethods.HEAD,
+                s3.HttpMethods.PUT,
+                s3.HttpMethods.DELETE,
+            ],
+            allowedHeaders: ["*"],
+            exposedHeaders: [
+                "x-amz-server-side-encryption",
+                "x-amz-request-id",
+                "x-amz-id-2",
+                "ETag",
+            ],
+            maxAge: 3000,
         });
 
         this.addOutputs({
