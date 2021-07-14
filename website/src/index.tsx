@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import Amplify from "aws-amplify";
 import { UserProvider } from './components/UserContext';
 
-Amplify.configure({
+const config = {
   Auth: {
     identityPoolId: process.env.REACT_APP_AWS_IDENTITY_POOL_ID,
     region: "us-east-1",
@@ -19,7 +19,11 @@ Amplify.configure({
     },
   },
   federationTarget: "COGNITO_USER_POOLS",
-});
+};
+
+console.info(`config`, JSON.stringify(config));
+
+Amplify.configure(config);
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,24 +1,23 @@
 import React from 'react';
 import { useCurrentUser } from './components/UserContext';
+import { ImageList } from './pages/ImageList';
 
 function App() {
   const user = useCurrentUser();
-  const [userName, setUserName] = React.useState<string | null>(null);
 
   React.useEffect(() => {
-    if (!user?.signIn) return;
-
-    if (user.user) {
-      setUserName(user.user.name);
-      return;
-    }
+    if (!user?.signIn || user.user) return;
 
     user.signIn();
   }, [user]);
 
+  if (user?.user) {
+    return <ImageList />
+  }
+
   return (
     <div className="App">
-      {user?.user ? <div>Signed In as {userName}</div> : <div>Not Signed In!</div>}
+      <div>Not Signed In!</div>
     </div>
   );
 }
