@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Auth, Hub } from "aws-amplify";
-import { CognitoUser } from "@aws-amplify/auth";
+import { CognitoUser, CognitoHostedUIIdentityProvider } from "@aws-amplify/auth";
 import { inspect } from "util";
 import jwtDecode from "jwt-decode";
 
@@ -42,13 +42,13 @@ export const UserProvider: React.FC = ({ children }) => {
       setUser(user);
 
 
-      AppleID.auth.init({
-        clientId: process.env.REACT_APP_APPLE_CLIENT_ID!,
-        scope: "name email",
-        redirectURI: window.location.origin,
-        state: "{}",
-        usePopup: true,
-      });
+      // AppleID.auth.init({
+      //   clientId: process.env.REACT_APP_APPLE_CLIENT_ID!,
+      //   scope: "name email",
+      //   redirectURI: window.location.origin,
+      //   state: "{}",
+      //   usePopup: true,
+      // });
 
       setInitialized(true);
     });
@@ -85,22 +85,15 @@ export const UserProvider: React.FC = ({ children }) => {
       // @ts-ignore
       user: user,
       async signIn() {
-        const {
-          authorization: { id_token },
-        } = await AppleID.auth.signIn();
+        // const {
+        //   authorization: { id_token },
+        // } = await AppleID.auth.signIn();
 
-        const tokenData = jwtDecode<TokenValues>(id_token);
+        // const tokenData = jwtDecode<TokenValues>(id_token);
 
-        await Auth.federatedSignIn(
-          "appleid.apple.com",
-          {
-            token: id_token,
-            expires_at: tokenData.exp,
-          },
-          {
-            name: tokenData.sub,
-          }
-        );
+        await Auth.federatedSignIn({
+          provider: CognitoHostedUIIdentityProvider.Google,
+        });
       }
     }
   }
