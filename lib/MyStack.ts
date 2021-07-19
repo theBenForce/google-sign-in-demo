@@ -53,7 +53,7 @@ export default class MyStack extends sst.Stack {
         });
 
         bucket.s3Bucket.addCorsRule({
-            allowedOrigins: [website.url],
+            allowedOrigins: [website.url, "http://localhost:3000"],
             allowedMethods: [
                 s3.HttpMethods.GET,
                 s3.HttpMethods.POST,
@@ -74,7 +74,7 @@ export default class MyStack extends sst.Stack {
         this.addOutputs({
             identityPoolId: auth.cognitoCfnIdentityPool.ref,
             storageBucket: bucket.bucketName,
-            // website: website.url,
+            website: website.url,
         });
     }
 }
