@@ -1,17 +1,8 @@
 
-import React from "react";
+import { CognitoUser } from "@aws-amplify/auth";
 import { Auth, Hub } from "aws-amplify";
-import { CognitoUser, CognitoHostedUIIdentityProvider } from "@aws-amplify/auth";
-import { inspect } from "util";
-import jwtDecode from "jwt-decode";
-import { GoogleLoginResponse, GoogleLoginResponseOffline, useGoogleLogin } from 'react-google-login'
-
-
-interface TokenValues {
-  exp: number;
-  sub: string;
-  iss: string;
-}
+import React from "react";
+import { GoogleLoginResponse, GoogleLoginResponseOffline, useGoogleLogin } from 'react-google-login';
 
 type UserContextValue = {
   user: { id: string; name: string; token: string; } | null;
@@ -41,8 +32,6 @@ export const UserProvider: React.FC = ({ children }) => {
   const [isInitialized, setInitialized] = React.useState(false);
 
   const onSuccess = React.useCallback(async (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-    console.info(JSON.stringify(response, null, 2));
-
     if (isGoogleLoginResponse(response)) {
       const { expires_at, id_token } = response.getAuthResponse();
 
