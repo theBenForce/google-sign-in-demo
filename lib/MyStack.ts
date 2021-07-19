@@ -9,8 +9,8 @@ export default class MyStack extends sst.Stack {
         // Create the Identity Pool
         const auth = new sst.Auth(this, `Auth`, {
             cognito: false,
-            apple: {
-                servicesId: process.env.APPLE_SERVICES_ID!,
+            google: {
+                clientId: process.env.GOOGLE_CLIENT_ID!,
             },
             identityPool: {
                 allowUnauthenticatedIdentities: false,
@@ -45,36 +45,36 @@ export default class MyStack extends sst.Stack {
 
         bucket.s3Bucket.grantReadWrite(auth.iamAuthRole);
 
-        const website = new sst.StaticSite(this, "ReactSite", {
-            path: "website",
-            buildOutput: "build",
-            buildCommand: "yarn build",
-            errorPage: sst.StaticSiteErrorOptions.REDIRECT_TO_INDEX_PAGE,
-        });
+        // const website = new sst.StaticSite(this, "ReactSite", {
+        //     path: "website",
+        //     buildOutput: "build",
+        //     buildCommand: "yarn build",
+        //     errorPage: sst.StaticSiteErrorOptions.REDIRECT_TO_INDEX_PAGE,
+        // });
 
-        bucket.s3Bucket.addCorsRule({
-            allowedOrigins: [website.url],
-            allowedMethods: [
-                s3.HttpMethods.GET,
-                s3.HttpMethods.POST,
-                s3.HttpMethods.HEAD,
-                s3.HttpMethods.PUT,
-                s3.HttpMethods.DELETE,
-            ],
-            allowedHeaders: ["*"],
-            exposedHeaders: [
-                "x-amz-server-side-encryption",
-                "x-amz-request-id",
-                "x-amz-id-2",
-                "ETag",
-            ],
-            maxAge: 3000,
-        });
+        // bucket.s3Bucket.addCorsRule({
+        //     allowedOrigins: [website.url],
+        //     allowedMethods: [
+        //         s3.HttpMethods.GET,
+        //         s3.HttpMethods.POST,
+        //         s3.HttpMethods.HEAD,
+        //         s3.HttpMethods.PUT,
+        //         s3.HttpMethods.DELETE,
+        //     ],
+        //     allowedHeaders: ["*"],
+        //     exposedHeaders: [
+        //         "x-amz-server-side-encryption",
+        //         "x-amz-request-id",
+        //         "x-amz-id-2",
+        //         "ETag",
+        //     ],
+        //     maxAge: 3000,
+        // });
 
         this.addOutputs({
             identityPoolId: auth.cognitoCfnIdentityPool.ref,
             storageBucket: bucket.bucketName,
-            website: website.url,
+            // website: website.url,
         });
     }
 }

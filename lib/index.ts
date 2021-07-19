@@ -4,10 +4,10 @@ import * as sst from "@serverless-stack/resources";
 export default function main(app: sst.App): void {
     // Set default runtime for all functions
     app.setDefaultFunctionProps({
-        runtime: "nodejs12.x",
+        runtime: "nodejs14.x",
     });
 
-    new MyStack(app, "apple-sign-in-test");
+    new MyStack(app, "google-sign-in-test");
 
     // Add more stacks
 }
